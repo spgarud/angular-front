@@ -201,15 +201,18 @@ app.config(function($stateProvider, $urlRouterProvider){
 
 app.run(["$rootScope", "$location", function ($rootScope, $location) {
 
-    $rootScope.$on("$routeChangeSuccess", function (userInfo) {
+    $rootScope.$on("$stateChangeSuccess", function (userInfo) {
         console.log(userInfo);
     });
 
-    $rootScope.$on("$routeChangeError", function (event, current, previous, eventObj) {
+    $rootScope.$on("$stateChangeError", function (event, current, previous, eventObj) {
         if (eventObj.authenticated === false) {
             $location.path("/login");
         }
     });
+    $rootScope.$on('$viewContentLoaded', function() {
+        $templateCache.removeAll();
+     });
 }]);
 app.config(function($sceDelegateProvider){ $sceDelegateProvider.resourceUrlWhitelist([
                                                                                       // Allow same origin resource loads.
@@ -262,7 +265,15 @@ app.factory("authenticationSvc", ["$http","$q","$window",function ($http, $q, $w
 
         return deferred.promise;
     }
-
+function search (par){
+	var d = null;
+	 $http.post("http://localhost:3000/api/search",{id: par }).then(function (result) {
+         d=result;
+         }, function (error) {
+             d=null;
+         });
+	 return d;
+}
     function getUserInfo() {
         return userInfo;
     }
@@ -326,9 +337,20 @@ app.controller('Home', function HomeController($state,$scope){
  });
  //define controller to fetch partner data
 app.controller('PartnerListController', ['$scope', '$http', function($scope, $http) {
-  $http.get('javascripts/ctr.json').success(function(data) {
-    $scope.partners = data;
-	});
+  //$http.post("http://localhost:3000/api/search",{id:'abc'}).success(function(data) {
+   //console.log(data);
+	 // $scope.partners = data;
+	//});
+ $scope.search=function()
+  {
+	 authenticationSvc.login('ABC') .then(function (result) {
+		 $scope.partners = result;
+     }, function (error) {
+         //$window.alert("Invalid credentials");
+         console.log(error);
+     });
+
+  };
   }]);
   //issuer controller
 app.controller('IssuerController', ['$scope', '$http', function($scope, $http) {
