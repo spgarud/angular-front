@@ -1,3 +1,29 @@
-<div>
-<h4>{{account.a}}</h4>
+
+<br>
+<div >
+		<ng-table id="accountList" border="1">
+			<tr>
+			  <th>Acc Last Four</th>
+			  <th>Destination Address</th>
+			  <th>Enrollment Type</th>
+			  <th>Account Status</th>
+			  <th>Date Enrolled</th>
+			</tr>
+			<!--<tr ng-repeat="acc in accounts">
+			  <td>{{acc.last4}}</td>
+			  <td>{{acc.destAdd}}</td> 
+			  <td>{{acc.enrollType}}</td>
+			  <td>{{acc.status}}</td>
+			  <td>{{acc.dateEnrolled}}</td>
+			</tr>-->
+			  <tr ng-repeat="acc in accounts">
+			  <td data-title="'last4'" sortable="'last4'">{{acc.last4}}</td>
+			  <td data-title="'dest'" sortable="'dest'">{{acc.destAdd}}</td> 
+			  <td data-title="'enType'" sortable="'enType'">{{acc.enrollType}}</td>
+			  <td data-title="'stat'" sortable="'stat'">{{acc.status}}</td>
+			  <td data-title="'date'" sortable="'date'">{{acc.dateEnrolled}}</td>
+			</tr>
+		</table>
 </div>
+<br>
+<input type="button" onclick="tableToExcel('accountList', 'Account List')" value="Export to Excel">

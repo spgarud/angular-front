@@ -1,4 +1,4 @@
-﻿var app = angular.module('securityApp', ["ui.router"]);
+﻿var app = angular.module('securityApp', ["ui.router", "ng-table"]);
 app.config(function($stateProvider, $urlRouterProvider){
     
     // For any unmatched url, send to /home
@@ -89,9 +89,13 @@ app.config(function($stateProvider, $urlRouterProvider){
         .state('home.account.list', {
             url: "/list",
             templateUrl: "templates/account.list.html",
-            controller: "AccountController"
+            controller: "AccountListController"
         })
-        
+        .state('home.account.search', {
+            url: "/search",
+            templateUrl: "templates/account.search.html",
+            //controller: "AccountSearchController"
+        })
       .state('home.report', {
           url: "/report",
           templateUrl: "templates/reports.html", resolve: {
@@ -358,11 +362,13 @@ app.controller('IssuerController', ['$scope', '$http', function($scope, $http) {
     $scope.p = data;
 	});
   }]); 
-//accounts controller
-app.controller('AccountController', function AccountController($scope){
-	$scope.account = {
-	'a': 'Account info here'};
- });
+//accountLists controller
+app.controller('AccountListController', ['$scope', '$http', function($scope, $http) {
+	  $http.get('javascripts/acc.json').success(function(data) {
+		    $scope.accounts = data;
+		    
+			});
+		  }]);
  //reports controller
 app.controller('Report1Controller', function ReportController($scope){
 	$scope.report = {
