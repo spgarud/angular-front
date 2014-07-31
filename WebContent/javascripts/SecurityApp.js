@@ -1,4 +1,4 @@
-﻿var app = angular.module('securityApp', ["ui.router", "ng-table"]);
+﻿var app = angular.module('securityApp', ["ui.router"]);
 app.config(function($stateProvider, $urlRouterProvider){
     
     // For any unmatched url, send to /home
@@ -40,7 +40,7 @@ app.config(function($stateProvider, $urlRouterProvider){
 		      .state('home.partner.option1', {
 		              url: "/search",
 		              templateUrl: "templates/partner.search.html",
-		              //controller: "PartnerSearchController"
+		              controller: "PartnerSearchController"
 		          })
 					.state('home.partner.option2', {
 		              url: "/list",
@@ -132,76 +132,7 @@ app.config(function($stateProvider, $urlRouterProvider){
 
 
 
-/**app.config(["$routeProvider",function ($routeProvider) {
-    $routeProvider.when("/", {
-        templateUrl: "templates/home.html",
-        controller: "HomeController",
-        resolve: {
-            auth: function ($q, authenticationSvc) {
-                var userInfo = authenticationSvc.getUserInfo();
-                if (userInfo) {
-                    return $q.when(userInfo);
-                } else {
-                    return $q.reject({ authenticated: false });
-                }
-            }
-        }
-    }).when('/message', {templateUrl: 'templates/mesaage.html', controller: 'Home',resolve: {
-            auth: function ($q, authenticationSvc) {
-                var userInfo = authenticationSvc.getUserInfo();
-                if (userInfo) {
-                    return $q.when(userInfo);
-                } else {
-                    return $q.reject({ authenticated: false });
-                }
-            }
-        }}).
-	when('/partners', {templateUrl: 'templates/partners.html', controller: 'PartnerListController',resolve: {
-            auth: function ($q, authenticationSvc) {
-                var userInfo = authenticationSvc.getUserInfo();
-                if (userInfo) {
-                    return $q.when(userInfo);
-                } else {
-                    return $q.reject({ authenticated: false });
-                }
-            }
-        }}).
-	when('/issuers', {templateUrl: 'templates/issuers.html', controller: 'IssuerController',resolve: {
-            auth: function ($q, authenticationSvc) {
-                var userInfo = authenticationSvc.getUserInfo();
-                if (userInfo) {
-                    return $q.when(userInfo);
-                } else {
-                    return $q.reject({ authenticated: false });
-                }
-            }
-        }}).
-	when('/accounts', {templateUrl: 'templates/accounts.html', controller: 'AccountController',resolve: {
-            auth: function ($q, authenticationSvc) {
-                var userInfo = authenticationSvc.getUserInfo();
-                if (userInfo) {
-                    return $q.when(userInfo);
-                } else {
-                    return $q.reject({ authenticated: false });
-                }
-            }
-        }}).
-	when('/reports', {templateUrl: 'templates/reports.html', controller: 'ReportController',resolve: {
-            auth: function ($q, authenticationSvc) {
-                var userInfo = authenticationSvc.getUserInfo();
-                if (userInfo) {
-                    return $q.when(userInfo);
-                } else {
-                    return $q.reject({ authenticated: false });
-                }
-            }
-        }}).
-	when("/login", {
-        templateUrl: "templates/login.html",
-        controller: "LoginController",
-    });
-	
-}]);*/
+
 
 app.run(["$rootScope", "$location", function ($rootScope, $location) {
 
@@ -269,15 +200,35 @@ app.factory("authenticationSvc", ["$http","$q","$window",function ($http, $q, $w
 
         return deferred.promise;
     }
-function search (par){
-	var d = null;
-	 $http.post("http://localhost:3000/api/search",{id: par }).then(function (result) {
-         d=result;
-         }, function (error) {
-             d=null;
-         });
-	 return d;
-}
+    
+function search (par) {
+
+        
+
+        var deferred = $q.defer();
+
+        $http.post("http://localhost:3000/api/search",{id: par }).then(function (result) {
+
+          //d=result;
+
+               deferred.resolve(result);
+
+          }, function (error) {
+
+                deferred.reject(error);
+
+          });
+
+        console.log(deferred.promise);
+
+        return deferred.promise;
+
+ }
+
+
+//function getV() {
+ //   return v;
+//}
     function getUserInfo() {
         return userInfo;
     }
@@ -290,6 +241,7 @@ function search (par){
     init();
 
     return {
+    	search: search,
         login: login,
         logout: logout,
         getUserInfo: getUserInfo
@@ -341,21 +293,57 @@ app.controller('Home', function HomeController($state,$scope){
  });
  //define controller to fetch partner data
 app.controller('PartnerListController', ['$scope', '$http', function($scope, $http) {
-  //$http.post("http://localhost:3000/api/search",{id:'abc'}).success(function(data) {
-   //console.log(data);
-	 // $scope.partners = data;
-	//});
- $scope.search=function()
-  {
-	 authenticationSvc.login('ABC') .then(function (result) {
-		 $scope.partners = result;
-     }, function (error) {
-         //$window.alert("Invalid credentials");
-         console.log(error);
-     });
+  $http.post("http://localhost:3000/api/search",{id:'abc'}).success(function(data) {
+   console.log(data);
+	 $scope.partners = data;
+	});
 
-  };
   }]);
+
+//define controller to search partner
+app.controller('PartnerSearchController', ['$scope', '$http', 'authenticationSvc', function($scope, $http, authenticationSvc) {
+	 // $http.post("http://localhost:3000/api/search",{id:'abc'}).success(function(data) {
+	 //  console.log(data);
+	//	 $scope.partners = data;
+		//});
+	//$scope.partners = null;
+	 $scope.search = function ()
+
+     {    //console.log($scope.partnerID);
+
+          authenticationSvc.search($scope.partnerID).then(function (result) {
+
+                // console.log(result);
+
+               //  var v = [];
+
+                 /*for(var i=0; i<=result.data.length; i++){
+
+                 v = {name:result.data[i].name,
+
+                              accountType:result.data[i].accountType,
+
+                              status:result.data[i].status };};*/
+
+            //deferred.resolve(result);
+
+                 //for(var i=0; i<=result.data.length; i++){
+
+               //  angular.forEach(result.data[i], function(value, key){this.push(key+': '+value);},v);}
+
+               //  console.log(v);
+
+                 $scope.partners = result.data;
+
+                
+        }, function (error) {
+
+            $window.alert("Invalid credentials");
+           // console.log(error);
+        });
+     };
+
+	  }]);
   //issuer controller
 app.controller('IssuerController', ['$scope', '$http', function($scope, $http) {
   $http.get('javascripts/ctr.json').success(function(data) {
@@ -375,4 +363,73 @@ app.controller('Report1Controller', function ReportController($scope){
 	'r': 'Generate reports here'};
  });
 
+/**app.config(["$routeProvider",function ($routeProvider) {
+$routeProvider.when("/", {
+    templateUrl: "templates/home.html",
+    controller: "HomeController",
+    resolve: {
+        auth: function ($q, authenticationSvc) {
+            var userInfo = authenticationSvc.getUserInfo();
+            if (userInfo) {
+                return $q.when(userInfo);
+            } else {
+                return $q.reject({ authenticated: false });
+            }
+        }
+    }
+}).when('/message', {templateUrl: 'templates/mesaage.html', controller: 'Home',resolve: {
+        auth: function ($q, authenticationSvc) {
+            var userInfo = authenticationSvc.getUserInfo();
+            if (userInfo) {
+                return $q.when(userInfo);
+            } else {
+                return $q.reject({ authenticated: false });
+            }
+        }
+    }}).
+when('/partners', {templateUrl: 'templates/partners.html', controller: 'PartnerListController',resolve: {
+        auth: function ($q, authenticationSvc) {
+            var userInfo = authenticationSvc.getUserInfo();
+            if (userInfo) {
+                return $q.when(userInfo);
+            } else {
+                return $q.reject({ authenticated: false });
+            }
+        }
+    }}).
+when('/issuers', {templateUrl: 'templates/issuers.html', controller: 'IssuerController',resolve: {
+        auth: function ($q, authenticationSvc) {
+            var userInfo = authenticationSvc.getUserInfo();
+            if (userInfo) {
+                return $q.when(userInfo);
+            } else {
+                return $q.reject({ authenticated: false });
+            }
+        }
+    }}).
+when('/accounts', {templateUrl: 'templates/accounts.html', controller: 'AccountController',resolve: {
+        auth: function ($q, authenticationSvc) {
+            var userInfo = authenticationSvc.getUserInfo();
+            if (userInfo) {
+                return $q.when(userInfo);
+            } else {
+                return $q.reject({ authenticated: false });
+            }
+        }
+    }}).
+when('/reports', {templateUrl: 'templates/reports.html', controller: 'ReportController',resolve: {
+        auth: function ($q, authenticationSvc) {
+            var userInfo = authenticationSvc.getUserInfo();
+            if (userInfo) {
+                return $q.when(userInfo);
+            } else {
+                return $q.reject({ authenticated: false });
+            }
+        }
+    }}).
+when("/login", {
+    templateUrl: "templates/login.html",
+    controller: "LoginController",
+});
 
+}]);*/

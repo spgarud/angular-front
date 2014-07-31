@@ -1,8 +1,28 @@
 <div>
-	<form name="searchPartner" ng-submit="searchP();">
-		<label for"partnerID"> PartnerID </label><input type="text" style="width: 100px" id="partnerID" ng-model="partnerID"> 	<!--OR <br>
-		<label for"partnerName"> Partner Name </label><input type="text" style="width: 100px" id="partnerName" ng-model="partnerName">-->
-		<input id="searchPartner" type="submit" onclick="searchP('partnerID', 'Partner List')" value="Search">
+	<form name="searchPartner" >
+		<label for"partnerID"> PartnerID </label>
+		<input type="text" style="width: 100px" id="partnerID" ng-model="partnerID" required> 	
+		<!--OR <br>
+		<label for"partnerName"> Partner Name </label>
+		<input type="text" style="width: 100px" id="partnerName" ng-model="partnerName"> -->
+		<div class="col-md-3">
+		<input id="searchPartner" type="submit"  ng-click="search()" value="Search">
+		</div>
 		<span>{{partnerID}}</span>
 	</form>
+</div>
+<div >
+		<table id="partnerList" border="1">
+			<tr>
+			  <td>Partner Name</td>
+			  <td>Account Type</td> 
+			  <td>Account Status</td>
+			</tr>
+			<tr ng-repeat="partner in partners">
+			  <td>{{partner.name}}</td>
+			  <td>{{partner.accountType}}</td> 
+			  <td>{{partner.status}}</td>
+			</tr>
+		</table>
 </div> 
+ 

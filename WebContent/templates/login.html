@@ -1,7 +1,7 @@
-  <body class="container">     
+<!--  <body class="container">     
   <div class="row">
     <div class="span12">
-<div class="row page-content">
+<div class="row page-content"> 
     <div class="row control-group">
         <div class="col-md-3">
             <label for="userName">User Name </label>
@@ -25,8 +25,24 @@
         <div class="col-md-3">
             <button ng-click="cancel()" class="btn btn-link">Cancel</button>
         </div>
-    </div>
+   </div> 
 </div>
 </div>
 </div>
-</body>
+</body> -->
+<body class="container">     
+  
+            <label for="userName">User Name </label>
+       
+            <input type="text" name="userName" ng-model="userName" />
+       
+            <label for="password">Password</label>
+       
+            <input type="password" name="password" ng-model="password" />
+    
+   	<div class="col-md-3">
+            <button class="btn btn-default" ng-click="login()">Login</button>
+      
+            <button ng-click="cancel()" class="btn btn-link">Cancel</button>
+	</div> 
+</body> 
