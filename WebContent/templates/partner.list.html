@@ -1,6 +1,37 @@
 <br>
-<div >
-		<table id="partnerList" border="1">
+<div ng-hide="!partners">
+<section ng-controller="SortController">
+  <span class="label">Ordered By: {{orderByField}}</span><br><br>
+  <table id="partnerList" class="table table-bordered"><!--  border="1">-->
+    <thead>
+      <tr>
+        <th>
+          <a href="" ng-click="orderByField='name'; reverseSort = !reverseSort">
+          Partner Name <span ng-show="orderByField == 'name'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="orderByField='accountType'; reverseSort = !reverseSort">
+          Account Type <span ng-show="orderByField == 'accountType'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="orderByField='status'; reverseSort = !reverseSort">
+          Account Status <span ng-show="orderByField == 'status'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="partner in partners |orderBy:orderByField:reverseSort">
+       		  <td>{{partner.name}}</td>
+			  <td>{{partner.accountType}}</td> 
+			  <td>{{partner.status}}</td>
+			</tr>
+    </tbody>
+  </table>
+</section>
+<!-- <table id="partnerList" border="1">
 			<tr>
 			  <td>Partner Name</td>
 			  <td>Account Type</td> 
@@ -11,7 +42,7 @@
 			  <td>{{partner.accountType}}</td> 
 			  <td>{{partner.status}}</td>
 			</tr>
-		</table>
+		</table> -->
+		<br>
+		<input type="button" onclick="tableToExcel('partnerList', 'Partner List')" value="Export to Excel">
 </div>
-<br>
-<input type="button" ng-hide=onclick="tableToExcel('partnerList', 'Partner List')" value="Export to Excel">

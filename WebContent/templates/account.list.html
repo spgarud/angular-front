@@ -1,7 +1,7 @@
 
 <br>
-<div >
-		<ng-table id="accountList" border="1">
+<div ng-hide="!accounts" >
+		<!--<table id="accountList" border="1">
 			<tr>
 			  <th>Acc Last Four</th>
 			  <th>Destination Address</th>
@@ -9,13 +9,13 @@
 			  <th>Account Status</th>
 			  <th>Date Enrolled</th>
 			</tr>
-			<!--<tr ng-repeat="acc in accounts">
-			  <td>{{acc.last4}}</td>
-			  <td>{{acc.destAdd}}</td> 
-			  <td>{{acc.enrollType}}</td>
-			  <td>{{acc.status}}</td>
-			  <td>{{acc.dateEnrolled}}</td>
-			</tr>-->
+			<tr ng-repeat="acct in accounts">
+			  <td>{{acct.last4}}</td>
+			  <td>{{acct.destAdd}}</td> 
+			  <td>{{acct.enrollType}}</td>
+			  <td>{{acct.status}}</td>
+			  <td>{{acct.dateEnrolled}}</td>
+			</tr>
 			  <tr ng-repeat="acc in accounts">
 			  <td data-title="'last4'" sortable="'last4'">{{acc.last4}}</td>
 			  <td data-title="'dest'" sortable="'dest'">{{acc.destAdd}}</td> 
@@ -23,7 +23,51 @@
 			  <td data-title="'stat'" sortable="'stat'">{{acc.status}}</td>
 			  <td data-title="'date'" sortable="'date'">{{acc.dateEnrolled}}</td>
 			</tr>
-		</table>
+		</table>-->
+<section ng-controller="SortController">
+  <span class="label">Ordered By: {{orderByField}}</span><br><br>
+  <table id="accountList" class="table table-bordered"><!--  border="1">-->
+    <thead>
+      <tr>
+        <th>
+          <a href="" ng-click="orderByField='last4'; reverseSort = !reverseSort">
+          Acc Last Four <span ng-show="orderByField == 'last4'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="orderByField='destAdd'; reverseSort = !reverseSort">
+          Destination Address <span ng-show="orderByField == 'destAdd'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="orderByField='enrollType'; reverseSort = !reverseSort">
+          Enrollment Type <span ng-show="orderByField == 'enrollType'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="orderByField='status'; reverseSort = !reverseSort">
+          Account Status <span ng-show="orderByField == 'status'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="orderByField='dateEnrolled'; reverseSort = !reverseSort">
+          Date Enrolled <span ng-show="orderByField == 'dateEnrolled'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="acct in accounts|orderBy:orderByField:reverseSort">
+        <td><a ui-sref="'{{acct.last4}}_details.html'" >{{acct.last4}}</a></td>
+			  <td>{{acct.destAdd}}</td> 
+			  <td>{{acct.enrollType}}</td>
+			  <td>{{acct.status}}</td>
+			  <td>{{acct.dateEnrolled}}</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+		<br>
+		<input type="button" onclick="tableToExcel('accountList', 'Account List')" value="Export to Excel">
 </div>
-<br>
-<input type="button" onclick="tableToExcel('accountList', 'Account List')" value="Export to Excel">
+<div ui-view></div>

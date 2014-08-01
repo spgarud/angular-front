@@ -51,7 +51,7 @@ app.config(function($stateProvider, $urlRouterProvider){
 		.state('home.issuer', {
           url: "/issuer",
           templateUrl: "templates/issuers.html",
-			controller: "IssuerController", resolve: {
+			resolve: {
 	            auth: function ($q, authenticationSvc) {
 	                var userInfo = authenticationSvc.getUserInfo();
 	                if (userInfo) {
@@ -65,12 +65,12 @@ app.config(function($stateProvider, $urlRouterProvider){
 		      .state('home.issuer.option1', {
 		              url: "/search",
 		              templateUrl: "templates/issuer.search.html",
-		              //controller: "IssuerSearchController"
+		              controller: "IssuerSearchController"
 		          })
 					.state('home.issuer.option2', {
 		              url: "/list",
 		              templateUrl: "templates/issuer.list.html",
-		              controller: "IssuerController"
+		              controller: "IssuerListController"
 					})
 		      
       .state('home.account', {
@@ -91,10 +91,11 @@ app.config(function($stateProvider, $urlRouterProvider){
             templateUrl: "templates/account.list.html",
             controller: "AccountListController"
         })
+		       
         .state('home.account.search', {
             url: "/search",
             templateUrl: "templates/account.search.html",
-            //controller: "AccountSearchController"
+            controller: "AccountSearchController"
         })
       .state('home.report', {
           url: "/report",
@@ -224,6 +225,16 @@ function search (par) {
         return deferred.promise;
 
  }
+function search1 (par) {
+    var deferred = $q.defer();
+    $http.post("http://localhost:3000/api/search1",{id: par }).then(function (result) {
+    deferred.resolve(result);
+    }, function (error) {
+            deferred.reject(error);
+      		});
+    console.log(deferred.promise);
+    return deferred.promise;
+}
 
 
 //function getV() {
@@ -242,12 +253,13 @@ function search (par) {
 
     return {
     	search: search,
+    	search1: search1,
         login: login,
         logout: logout,
         getUserInfo: getUserInfo
     };
 }]);
-
+//----------------------------------controllers-----------------------------------------------------------
 app.controller("LoginController", ["$scope", "$location", "$window", "authenticationSvc",function ($scope, $location, $window, authenticationSvc) {
     $scope.userInfo = null;
     $scope.login = function () {
@@ -293,13 +305,19 @@ app.controller('Home', function HomeController($state,$scope){
  });
  //define controller to fetch partner data
 app.controller('PartnerListController', ['$scope', '$http', function($scope, $http) {
-  $http.post("http://localhost:3000/api/search",{id:'abc'}).success(function(data) {
-   console.log(data);
-	 $scope.partners = data;
+  $http.post("http://localhost:3000/api/search",{id:'abc'}).success(function(res) {
+   console.log(res);
+	 $scope.partners = res;
 	});
-
+  /*.then(function (data) {
+  console.log(data);
+	 $scope.partners = data;
+}, function (error) {
+  $window.alert("Resource Not Found");
+  console.log(error);
+});*/
   }]);
-
+  
 //define controller to search partner
 app.controller('PartnerSearchController', ['$scope', '$http', 'authenticationSvc', function($scope, $http, authenticationSvc) {
 	 // $http.post("http://localhost:3000/api/search",{id:'abc'}).success(function(data) {
@@ -345,23 +363,73 @@ app.controller('PartnerSearchController', ['$scope', '$http', 'authenticationSvc
 
 	  }]);
   //issuer controller
-app.controller('IssuerController', ['$scope', '$http', function($scope, $http) {
-  $http.get('javascripts/ctr.json').success(function(data) {
-    $scope.p = data;
-	});
-  }]); 
+app.controller('IssuerListController', ['$scope', '$http', function($scope, $http) {
+	 $http.post("http://localhost:3000/api/search",{id:'abc'}).success(function(res) {
+		   console.log(res);
+			 $scope.issuers = res;
+			});
+		  
+		  }]);
+//define controller to search issuer
+app.controller('IssuerSearchController', ['$scope', '$http', 'authenticationSvc', function($scope, $http, authenticationSvc) {
+	
+	 $scope.search = function ()
+
+     {    //console.log($scope.issuerID);
+
+          authenticationSvc.search($scope.issuerID).then(function (result) {
+
+          $scope.issuers = result.data;
+
+                
+        }, function (error) {
+
+            $window.alert("Invalid credentials");
+           // console.log(error);
+        });
+     };
+
+	  }]);
 //accountLists controller
 app.controller('AccountListController', ['$scope', '$http', function($scope, $http) {
-	  $http.get('javascripts/acc.json').success(function(data) {
-		    $scope.accounts = data;
-		    
+	$http.post("http://localhost:3000/api/search1",{id:'abc'}).success(function(acct) {
+		   console.log(acct);
+			 $scope.accounts = acct;
 			});
+		  
 		  }]);
+//define controller to search account
+app.controller('AccountSearchController', ['$scope', '$http', 'authenticationSvc', function($scope, $http, authenticationSvc) {
+	
+	 $scope.search = function ()
+
+     {    console.log($scope.phoneNo);
+
+          authenticationSvc.search1($scope.phoneNo).then(function (result) {
+
+          $scope.accounts = result.data;
+                
+        }, function (error) {
+
+            $window.alert("Invalid credentials");
+           // console.log(error);
+        });
+     };
+
+	  }]);
  //reports controller
 app.controller('Report1Controller', function ReportController($scope){
 	$scope.report = {
 	'r': 'Generate reports here'};
  });
+app.controller('DateController', ['$scope', function($scope) {
+    $scope.value = new Date(2014, 01, 28, 14, 00);
+}]);
+app.controller('SortController', function($scope){
+	$scope.orderByField = "";
+	$scope.reverseSort = false;
+});
+
 
 /**app.config(["$routeProvider",function ($routeProvider) {
 $routeProvider.when("/", {

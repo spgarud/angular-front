@@ -1,10 +1,50 @@
 <div>
 		
-			<form name="searchIssuer" ng-submit="searchI();">
-				<label for"issuerID"> IssuerID </label><input type="text" style="width: 100px" id="issuerID" ng-model="issuerID"> 	<!--OR <br>
-				<label for"issuerName"> Issuer Name </label><input type="text" style="width: 100px" id="issuerName" ng-model="issuerName">-->
-				<input id="searchIssuer" type="submit" value="Search">
+			<form name="searchIssuer" >
+				<label for"issuerID"> IssuerID </label>
+				<input type="text" style="width: 100px" id="issuerID" ng-model="issuerID"> 	<!--OR <br>
+				<label for"issuerName"> Issuer Name </label>
+				<input type="text" style="width: 100px" id="issuerName" ng-model="issuerName">-->
+				<div class="col-md-3">
+				<input id="searchIssuer" ng-click="search()" type="submit" value="Search">
+				</div>
 				<span>{{issuerID}}</span>
 			</form>
 		
+</div> 
+</br>
+<div ng-hide="!issuers">
+		<section ng-controller="SortController">
+  <span class="label">Ordered By: {{orderByField}}</span><br><br>
+  <table id="issuerList" class="table table-bordered"><!--  border="1">-->
+    <thead>
+      <tr>
+        <th>
+          <a href="" ng-click="orderByField='name'; reverseSort = !reverseSort">
+          Issuer Name <span ng-show="orderByField == 'name'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="orderByField='accountType'; reverseSort = !reverseSort">
+          Account Type <span ng-show="orderByField == 'accountType'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="orderByField='status'; reverseSort = !reverseSort">
+          Account Status <span ng-show="orderByField == 'status'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="issuer in issuers | limitTo:5|orderBy:orderByField:reverseSort">
+       		  <td>{{issuer.name}}</td>
+			  <td>{{issuer.accountType}}</td> 
+			  <td>{{issuer.status}}</td>
+			</tr>
+    </tbody>
+  </table>
+</section>
+		<br>
+		<input type="button" onclick="tableToExcel('issuerList', 'Issuer List')" value="Export to Excel">
 </div> 
