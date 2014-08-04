@@ -2,4 +2,71 @@
 <h4>
   {{report.r}}
 </h4>
+<h3>Search Transaction messages</h3>
+<form name="searchTM" ng-controller="DateController as dateCtrl"> 
+	<label for"partnerID"> PartnerID </label>
+	<input type="text" style="width: 100px" id="partnerID" ng-model="partnerID" required> 	
+		<!--OR <br>
+		<label for"partnerName"> Partner Name </label>
+		<input type="text" style="width: 100px" id="partnerName" ng-model="partnerName"> -->
+		<!-- <div class="col-md-3">
+		<input id="searchPartner" type="submit"  ng-click="search()" value="Search">
+		</div></form> -->
+			<!-- <form name="SearchTransactMesg" ng-controller="DateController as dateCtrl"> -->
+ 	<label for"Date">Select date and time window : </label>
+  	from: <input type="datetime-local" id="exampleInput" name="input" ng-model="value"
+      placeholder="yyyy-MM-ddTHH:mm" min="2001-01-01T00:00" max="2013-12-31T00:00" required />
+    to:  <input type="datetime-local" id="exampleInput" name="input" ng-model="value"
+      placeholder="yyyy-MM-ddTHH:mm" min="2001-01-01T00:00" max="2013-12-31T00:00" required />
+			  <span class="error" ng-show="myForm.input.$error.required">
+			      Required!</span>
+			  <span class="error" ng-show="myForm.input.$error.datetimelocal">
+			      Not a valid date!</span>
+			  <!-- <tt>value = {{value | date: "yyyy-MM-ddTHH:mm"}}</tt><br/>
+			  <tt>myForm.input.$valid = {{myForm.input.$valid}}</tt><br/>
+			  <tt>myForm.input.$error = {{myForm.input.$error}}</tt><br/>
+			  <tt>myForm.$valid = {{myForm.$valid}}</tt><br/>
+			  <tt>myForm.$error.required = {{!!myForm.$error.required}}</tt><br/> -->
+  <div class="col-md-3">
+	<input id="searchTM" type="submit"  ng-click="search()" value="Search">
+  </div>
+  
+</form>
+</div>
+<br>
+<div ng-hide="!partners">
+<section ng-controller="SortController">
+  <span class="label">Ordered By: {{orderByField}}</span><br><br>
+  <table id="partnerList" class="table table-bordered"><!--  border="1">-->
+    <thead>
+      <tr>
+        <th>
+          <a href="" ng-click="orderByField='name'; reverseSort = !reverseSort">
+          Partner Name <span ng-show="orderByField == 'name'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="orderByField='accountType'; reverseSort = !reverseSort">
+          Account Type <span ng-show="orderByField == 'accountType'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="orderByField='status'; reverseSort = !reverseSort">
+          Account Status <span ng-show="orderByField == 'status'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="partner in partners |orderBy:orderByField:reverseSort">
+       		  <td>{{partner.name}}</td>
+			  <td>{{partner.accountType}}</td> 
+			  <td>{{partner.status}}</td>
+			</tr>
+    </tbody>
+  </table>
+</section>
 
+		<br>
+		<input type="button" onclick="tableToExcel('partnerList', 'Partner List')" value="Export to Excel">
+</div> 
