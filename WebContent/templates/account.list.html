@@ -1,34 +1,38 @@
 
 <br>
 <div ng-hide="!accounts" >
-		<!--<table id="accountList" border="1">
-			<tr>
-			  <th>Acc Last Four</th>
-			  <th>Destination Address</th>
-			  <th>Enrollment Type</th>
-			  <th>Account Status</th>
-			  <th>Date Enrolled</th>
-			</tr>
-			<tr ng-repeat="acct in accounts">
-			  <td>{{acct.last4}}</td>
-			  <td>{{acct.destAdd}}</td> 
-			  <td>{{acct.enrollType}}</td>
-			  <td>{{acct.status}}</td>
-			  <td>{{acct.dateEnrolled}}</td>
-			</tr>
-			  <tr ng-repeat="acc in accounts">
-			  <td data-title="'last4'" sortable="'last4'">{{acc.last4}}</td>
-			  <td data-title="'dest'" sortable="'dest'">{{acc.destAdd}}</td> 
-			  <td data-title="'enType'" sortable="'enType'">{{acc.enrollType}}</td>
-			  <td data-title="'stat'" sortable="'stat'">{{acc.status}}</td>
-			  <td data-title="'date'" sortable="'date'">{{acc.dateEnrolled}}</td>
-			</tr>
-		</table>-->
+
 <section ng-controller="SortController">
-  <span class="label">Ordered By: {{orderByField}}</span><br><br>
-  <table id="accountList" class="table table-bordered"><!--  border="1">-->
+ This view is to be added under ADMIN ONLY after user-role implementation.<br>
+   <span class="label">Ordered By: {{orderByField}}</span><br><br>
+  <table id="accountAdminList" class="table table-bordered"><!--  border="1">-->
     <thead>
       <tr>
+      	<th>
+          <a href="" ng-click="orderByField='cuid'; reverseSort = !reverseSort">
+          CUID <span ng-show="orderByField == 'cuid'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="orderByField='muid'; reverseSort = !reverseSort">
+          MUID <span ng-show="orderByField == 'muid'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="orderByField='processorID'; reverseSort = !reverseSort">
+          Processor ID <span ng-show="orderByField == 'processorID'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="orderByField='issuerID'; reverseSort = !reverseSort">
+          Issuer ID <span ng-show="orderByField == 'issuerID'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="orderByField='sendingPID'; reverseSort = !reverseSort">
+          Sending Partner <span ng-show="orderByField == 'sendingPID'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
         <th>
           <a href="" ng-click="orderByField='last4'; reverseSort = !reverseSort">
           Acc Last Four <span ng-show="orderByField == 'last4'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
@@ -58,7 +62,12 @@
     </thead>
     <tbody>
       <tr ng-repeat="acct in accounts|orderBy:orderByField:reverseSort">
-        <td><a ui-sref="'{{acct.last4}}_details.html'" >{{acct.last4}}</a></td>
+        	  <td>{{acct.cuid}}</td>
+			  <td>{{acct.muid}}</td> 
+			  <td>{{acct.processorID}}</td>
+			  <td>{{acct.issuerID}}</td>
+			  <td>{{acct.sendingPID}}</td>
+			  <td>{{acct.last4}}</td>
 			  <td>{{acct.destAdd}}</td> 
 			  <td>{{acct.enrollType}}</td>
 			  <td>{{acct.status}}</td>
@@ -66,8 +75,17 @@
       </tr>
     </tbody>
   </table>
-</section>
+ </section>
+ <!-- <div ng-controller="PageController" >
+    <button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
+        Previous
+    </button>
+    {{currentPage+1}}/{{numberOfPages()}}
+    <button ng-disabled="currentPage >= acct.length/pageSize - 1" ng-click="currentPage=currentPage+1">
+        Next
+    </button>
+</div> -->
 		<br>
-		<input type="button" onclick="tableToExcel('accountList', 'Account List')" value="Export to Excel">
+		<input type="button" onclick="tableToExcel('accountAdminList', 'Account List')" value="Export to Excel">
 </div>
 <div ui-view></div>

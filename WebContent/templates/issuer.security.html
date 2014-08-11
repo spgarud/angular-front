@@ -1,12 +1,12 @@
 <div>
-		
-			<form name="searchIssuer" >
-				<h5>Search by IssuerID:</h5>
+		<h5>Find Security Question Configuration for IssuerID:</h5>
+			<form name="searchISQ" >
+				<!-- <label for"issuerID"> IssuerID </label> -->
 				<input type="text" style="width: 100px" id="issuerID" ng-model="issuerID" required> 	<!--OR <br>
 				<label for"issuerName"> Issuer Name </label>
 				<input type="text" style="width: 100px" id="issuerName" ng-model="issuerName">-->
 				<div class="col-md-3">
-				<input id="searchIssuer" ng-disabled="!searchIssuer.$valid" ng-click="search()" type="submit" value="Search">
+				<input id="searchIssuer" ng-disabled="!searchISQ.$valid" ng-click="search()" type="submit" value="Search">
 				</div>
 				
 			</form>
@@ -14,7 +14,7 @@
 </div> 
 
 <div ng-hide="!issuers">
- 
+
 Records for Issuer ID {{issuerID}}:
 <br>
 		<section ng-controller="SortController">
@@ -22,24 +22,24 @@ Records for Issuer ID {{issuerID}}:
   <table id="issuerList" class="table table-bordered"><!--  border="1">-->
     <thead>
       <tr>
-      	<th>
+        <th>
           <a href="" ng-click="orderByField='issuerID'; reverseSort = !reverseSort">
           Issuer ID <span ng-show="orderByField == 'issuerID'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
           </a>
         </th>
         <th>
-          <a href="" ng-click="orderByField='issuerName'; reverseSort = !reverseSort">
-          Issuer Name <span ng-show="orderByField == 'issuerName'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          <a href="" ng-click="orderByField='questionID'; reverseSort = !reverseSort">
+          Question ID <span ng-show="orderByField == 'questionID'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
           </a>
         </th>
         <th>
-          <a href="" ng-click="orderByField='displayName'; reverseSort = !reverseSort">
-          Display Name <span ng-show="orderByField == 'displayName'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          <a href="" ng-click="orderByField='processorID'; reverseSort = !reverseSort">
+          Processor ID <span ng-show="orderByField == 'processorID'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
           </a>
         </th>
         <th>
-          <a href="" ng-click="orderByField='desc'; reverseSort = !reverseSort">
-          Description <span ng-show="orderByField == 'desc'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          <a href="" ng-click="orderByField='questText'; reverseSort = !reverseSort">
+          Question Text <span ng-show="orderByField == 'questText'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
           </a>
         </th>
       </tr>
@@ -47,11 +47,11 @@ Records for Issuer ID {{issuerID}}:
     <tbody>
       <tr ng-repeat="issuer in issuers | limitTo:5|orderBy:orderByField:reverseSort">
        		  <td>{{issuer.issuerID}}</td>
-       		  <td>{{issuer.issuerName}}</td>
-			  <td>{{issuer.displayName}}</td> 
-			  <td>{{issuer.desc}}</td>
-			</tr>
-    </tbody>
+			  <td>{{issuer.questionID}}</td> 
+			  <td>{{issuer.processorID}}</td>
+			  <td>{{issuer.questText}}</td>
+			</tr> 
+	</tbody>
   </table>
 </section>
 		<br>

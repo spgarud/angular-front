@@ -9,3 +9,98 @@ var tableToExcel = (function() {
     window.location.href = uri + base64(format(template, ctx))
   }
 })()
+
+
+
+//We already have a limitTo filter built-in to angular,
+//let's make a startFrom filter
+app.filter('startFrom', function() {
+    return function(input, start) {
+        start = +start; //parse to int
+        return input.slice(start);
+    }
+});
+
+
+var TimepickerDemoCtrl = function ($scope) {
+  $scope.event = {
+      startDate: new Date()
+    };
+    
+    $scope.config = {
+      showMeridian: false,
+      hourSteps: 1,
+      minuteSteps: 15
+    };
+    
+    $scope.clicked = function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    };
+};
+/*var compareDate =( function(){
+	var FromDate = new Date(fromValue);
+    var ToDate = new Date(toValue);
+    var valCurDate = new Date();
+    valCurDate = valCurDate.getMonth()+1 + "/" + valCurDate.getDate() + "/" + valCurDate.getYear();
+    var CurDate = new Date(valCurDate);
+ 
+    if(frominput > toinput)
+    {
+        alert(frominput + " should be less than " + toinput);
+        return false; 
+    }
+    else if(frominput > CurDate)
+    {
+        alert("From date should be less than current date");
+        return false; 
+    }
+    else if(toinput > CurDate)
+    {
+        alert("To date should be less than current date");
+        return false;
+    }
+})()
+---------------------------------------------
+function compareDate() {
+    var fromdate=new Date(document.getElementById(frominput).value);
+    var todate = new Date(document.getElementById(toinput).value);
+    
+    if(frominput>toinput)
+    {
+        alert("fromdate cannot be greater than todate");
+        return false;
+    }
+    else
+    {
+    	alert("THIS RANGE WORKS");
+    	return true;
+    }
+}
+-------------------------------------------------
+function compDate() {
+var objFromDate = document.getElementById("frominput").value; 
+var objToDate = document.getElementById("toinput").value;
+ 
+var FromDate = new Date(objFromInput);
+    var ToDate = new Date(objToInput);
+    var valCurDate = new Date();
+    valCurDate = valCurDate.getMonth()+1 + "/" + valCurDate.getDate() + "/" + valCurDate.getYear();
+    var CurDate = new Date(valCurDate);
+ 
+    if(frominput > toinput)
+    {
+        alert(frominput + " should be less than " + toinput);
+        return false; 
+    }
+    else if(frominput > CurDate)
+    {
+        alert("From date should be less than current date");
+        return false; 
+    }
+    else if(toinput > CurDate)
+    {
+        alert("To date should be less than current date");
+        return false;
+    }
+}*/

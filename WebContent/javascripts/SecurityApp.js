@@ -1,11 +1,11 @@
 ﻿//new code with idle timeout
 var app = angular.module('securityApp', ["ui.router", "ngIdle"]);
 app.config(function($idleProvider, $stateProvider, $urlRouterProvider, $keepaliveProvider){
-	$idleProvider.idleDuration(60); // in seconds
+	$idleProvider.idleDuration(160); // in seconds
 
-    $idleProvider.warningDuration(60); // in seconds
+    $idleProvider.warningDuration(160); // in seconds
 
-    $keepaliveProvider.interval(60); // in seconds
+    $keepaliveProvider.interval(160); // in seconds
     
 /*old code without idle timeout
  * var app = angular.module('securityApp', ["ui.router"]);
@@ -57,6 +57,11 @@ app.config(function($stateProvider, $urlRouterProvider){*/
 		              templateUrl: "templates/partner.list.html",
 		              controller: "PartnerListController"
 					})
+					.state('home.partner.option3', {
+					  url: "/security_q",
+					  templateUrl: "templates/partner.security.html",
+					  controller: "PartnerSecQsController"
+					})
       
 		.state('home.issuer', {
           url: "/issuer",
@@ -82,6 +87,16 @@ app.config(function($stateProvider, $urlRouterProvider){*/
 		              templateUrl: "templates/issuer.list.html",
 		              controller: "IssuerListController"
 					})
+					.state('home.issuer.option3', {
+		              url: "/security_q",
+		              templateUrl: "templates/issuer.security.html",
+		              controller: "IssuerSecQsController"
+					})
+					.state('home.issuer.option4', {
+		            url: "/odsConfig",
+		            templateUrl: "templates/issuer.ods.html",
+		            controller: "IssuerODSController"
+		        })
 
       .state('home.account', {
           url: "/account",
@@ -128,15 +143,33 @@ app.config(function($stateProvider, $urlRouterProvider){*/
 		  .state('home.report.report2', {
             url: "/report2",
             templateUrl: "templates/report.report2.html",
-            controller: function($scope){
-              $scope.stuffs = ["some", "other", "list", "Of", "stuff"];
-            }
+            controller: "Report2Controller"
+            
         })
 		  .state('home.report.report3', {
             url: "/report3",
             templateUrl: "templates/report.report3.html",
+            controller: "Report3Controller"
+        })
+         .state('home.report.report4', {
+            url: "/report4",
+            templateUrl: "templates/report.report4.html",
             controller: function($scope){
-              $scope.objects = ["can", "not", "think", "Of", "anything"];
+              $scope.stops = ["some ", "random", "way", "Of", "things"];
+            }
+        })
+        /* .state('home.report.report5', {
+            url: "/report5",
+            templateUrl: "templates/report.report5.html",
+            controller: function($scope){
+              $scope.configs = ["Omaha Host Configuration Values ", "IssuerID", "IssuerName", "Description", "AttributeName", "AttributeValue", "DateCreated"];
+            }
+        })*/
+        .state('home.report.report5', {
+            url: "/report5",
+            templateUrl: "templates/report.report5.html",
+            controller: function($scope){
+              $scope.display = ["aggregator ", "health", "check", "will", "be"," here"];
             }
         })
   })
@@ -251,6 +284,7 @@ function search (par) {
         return deferred.promise;
 
  }
+//for account search
 function search1 (par) {
     var deferred = $q.defer();
     $http.post("http://localhost:3000/api/search1",{id: par }).then(function (result) {
@@ -261,8 +295,61 @@ function search1 (par) {
     console.log(deferred.promise);
     return deferred.promise;
 }
-
-
+//for issuer ODS values search
+function search2 (par) {
+    var deferred = $q.defer();
+    $http.post("http://localhost:3000/api/search2",{id: par }).then(function (result) {
+    deferred.resolve(result);
+    }, function (error) {
+            deferred.reject(error);
+      		});
+    console.log(deferred.promise);
+    return deferred.promise;
+}
+//for issuer search
+function search3 (par) {
+    var deferred = $q.defer();
+    $http.post("http://localhost:3000/api/search3",{id: par }).then(function (result) {
+    deferred.resolve(result);
+    }, function (error) {
+            deferred.reject(error);
+      		});
+    console.log(deferred.promise);
+    return deferred.promise;
+}
+//for transaction messages (report1) search and for delivery reciepts
+function search4 (par) {
+    var deferred = $q.defer();
+    $http.post("http://localhost:3000/api/search4",{id: par }).then(function (result) {
+    deferred.resolve(result);
+    }, function (error) {
+            deferred.reject(error);
+      		});
+    console.log(deferred.promise);
+    return deferred.promise;
+}
+//for delivery reports(report2) search
+function search5 (par) {
+    var deferred = $q.defer();
+    $http.post("http://localhost:3000/api/search5",{id: par }).then(function (result) {
+    deferred.resolve(result);
+    }, function (error) {
+            deferred.reject(error);
+      		});
+    console.log(deferred.promise);
+    return deferred.promise;
+}
+//for enrollment counts(report3) search
+function search6 (par) {
+    var deferred = $q.defer();
+    $http.post("http://localhost:3000/api/search6",{id: par }).then(function (result) {
+    deferred.resolve(result);
+    }, function (error) {
+            deferred.reject(error);
+      		});
+    console.log(deferred.promise);
+    return deferred.promise;
+}
 //function getV() {
  //   return v;
 //}
@@ -280,6 +367,11 @@ function search1 (par) {
     return {
     	search: search,
     	search1: search1,
+    	search2: search2,
+    	search3: search3,
+    	search4: search4,
+    	search5: search5,
+    	search6: search6,
         login: login,
         logout: logout,
         getUserInfo: getUserInfo
@@ -328,7 +420,7 @@ app.controller("HomeController", ["$window","$scope", "$location", "authenticati
     });
     /*---------------------idle timeout code END--------------------------*/
     $scope.message = {
-                  'm': 'welcome message'};
+                  'm': 'Welcome message'};
     $scope.userInfo = auth;
 
  $scope.logout = function () {
@@ -426,9 +518,28 @@ app.controller('PartnerSearchController', ['$scope', '$http', 'authenticationSvc
      };
 
 	  }]);
+app.controller('PartnerSecQsController', ['$scope', '$http', 'authenticationSvc', function($scope, $http, authenticationSvc) {
+
+	 $scope.search = function ()
+
+   {    //console.log($scope.issuerID);
+
+        authenticationSvc.search($scope.partnerID).then(function (result) {
+
+        $scope.partners = result.data;
+
+              
+      }, function (error) {
+
+          $window.alert("Invalid credentials");
+         // console.log(error);
+      });
+   };
+
+	  }]);
   //issuer controller
 app.controller('IssuerListController', ['$scope', '$http', function($scope, $http) {
-	 $http.post("http://localhost:3000/api/search",{id:'abc'}).success(function(res) {
+	 $http.post("http://localhost:3000/api/search3",{id:'abc'}).success(function(res) {
 		   console.log(res);
 			 $scope.issuers = res;
 			});
@@ -441,7 +552,7 @@ app.controller('IssuerSearchController', ['$scope', '$http', 'authenticationSvc'
 
      {    //console.log($scope.issuerID);
 
-          authenticationSvc.search($scope.issuerID).then(function (result) {
+          authenticationSvc.search3($scope.issuerID).then(function (result) {
 
           $scope.issuers = result.data;
 
@@ -454,6 +565,42 @@ app.controller('IssuerSearchController', ['$scope', '$http', 'authenticationSvc'
      };
 
 	  }]);
+app.controller('IssuerSecQsController', ['$scope', '$http', 'authenticationSvc', function($scope, $http, authenticationSvc) {
+
+	 $scope.search = function ()
+
+    {    //console.log($scope.issuerID);
+
+         authenticationSvc.search3($scope.issuerID).then(function (result) {
+
+         $scope.issuers = result.data;
+
+               
+       }, function (error) {
+
+           $window.alert("Invalid credentials");
+          // console.log(error);
+       });
+    };
+
+	  }]);
+//issuer ODS controller
+app.controller('IssuerODSController', ['$scope', '$http', 'authenticationSvc', function($scope, $http, authenticationSvc) {
+	 $scope.search = function ()
+
+     {    console.log($scope.issuerID);
+
+          authenticationSvc.search2($scope.issuerID).then(function (result) {
+
+          $scope.configs = result.data;
+                
+        }, function (error) {
+
+            $window.alert("Invalid credentials");
+           // console.log(error);
+        });
+     };
+}]);
 //accountLists controller
 app.controller('AccountListController', ['$scope', '$http', function($scope, $http) {
 	$http.post("http://localhost:3000/api/search1",{id:'abc'}).success(function(acct) {
@@ -481,20 +628,193 @@ app.controller('AccountSearchController', ['$scope', '$http', 'authenticationSvc
      };
 
 	  }]);
- //reports controller
-app.controller('Report1Controller', function ReportController($scope){
+ //transaction messages report controller
+app.controller('Report1Controller', ['$scope', '$http', 'authenticationSvc', function($scope, $http, authenticationSvc) {
 	$scope.report = {
 	'r': 'Generate reports here'};
- });
-app.controller('DateController', ['$scope', function($scope) {
-    $scope.value = new Date(2014, 01, 28, 14, 00);
+	 	$scope.fromValue = "";//new Date();2010, 11, 28, 14, 57
+	    $scope.toValue = "";//new Date();//2014, 01, 22, 14, 57 -if this variable is instanciated to a value, ng-disabled will not work
+	    $scope.comDate = function(){
+	    					var FromDate = new Date($scope.fromValue);
+						    var ToDate = new Date($scope.toValue);
+						    //var valCurDate = new Date();
+						   // valCurDate = valCurDate.getMonth()+1 + "/" + valCurDate.getDate() + "/" + valCurDate.getYear();
+						    //var CurDate = getDate();
+						    if(FromDate > ToDate)
+						    {
+						        alert(" From Date should be less than ToDate");
+						        return false; 
+						    }
+						    // else if(FromDate > CurDate)
+						    // {
+							   //    alert("From date should be less than current date");
+						    //     return false; 
+						    //}
+						    //else if(ToDate > CurDate)
+						    //  {
+						    //     alert("To date should be less than current date");
+						    //    return false;
+						    // }
+						    return true;
+						};
+						
+						 $scope.search = function ()
+
+					     {    console.log($scope.partnerID);
+
+					          authenticationSvc.search4($scope.partnerID).then(function (result) {
+
+					          $scope.messages = result.data;
+					                
+					        }, function (error) {
+
+					            $window.alert("Invalid credentials");
+					           // console.log(error);
+					        });
+					     };
+ 
 }]);
+
+//delivery receipts report controller
+app.controller('Report2Controller', ['$scope', '$http', 'authenticationSvc', function($scope, $http, authenticationSvc) {
+	 	$scope.fromValue = "";//new Date();2010, 11, 28, 14, 57
+	    $scope.toValue = "";//new Date();//2014, 01, 22, 14, 57 -if this variable is instanciated to a value, ng-disabled will not work
+	    $scope.comDate = function(){
+	    					var FromDate = new Date($scope.fromValue);
+						    var ToDate = new Date($scope.toValue);
+						   	    if(FromDate > ToDate)
+							    {
+							        alert(" From Date should be less than ToDate");
+							        return false; 
+							    }
+						   return true;
+						};
+						
+						 $scope.search = function ()
+
+					     {    console.log($scope.partnerID);
+
+					          authenticationSvc.search5($scope.partnerID).then(function (result) {
+
+					          $scope.receipts = result.data;
+					                
+					        }, function (error) {
+
+					            $window.alert("Invalid credentials");
+					           // console.log(error);
+					        });
+					     };
+ 
+}]);
+//enrollment count report controller
+app.controller('Report3Controller', ['$scope', '$http', 'authenticationSvc', function($scope, $http, authenticationSvc) {
+	 	$scope.fromValue = "";
+	    $scope.toValue = "";//if this variable is instanciated to a value, ng-disabled will not work
+	    $scope.comDate = function(){
+	    					var FromDate = new Date($scope.fromValue);
+						    var ToDate = new Date($scope.toValue);
+						   	    if(FromDate > ToDate)
+							    {
+							        alert(" From Date should be less than ToDate");
+							        return false; 
+							    }
+						   return true;
+						};
+						
+						 $scope.search = function ()
+
+					     {    console.log($scope.partnerID);
+
+					          authenticationSvc.search6($scope.issuerID).then(function (result) {
+
+					          $scope.counts = result.data;
+					                
+					        }, function (error) {
+
+					            $window.alert("Invalid credentials");
+					           // console.log(error);
+					        });
+					     };
+ 
+}]);
+/*
+app.controller('DateController', ['$scope', function($scope) {
+    $scope.fromValue = new Date(2010, 11, 28, 14, 57);
+    $scope.toValue = new Date(2014, 11, 22, 14, 57);
+    
+    $scope.compareDate = function(){
+    					var FromDate = new Date(fromValue);
+					    var ToDate = new Date(toValue);
+					    var valCurDate = new Date();
+					    valCurDate = valCurDate.getMonth()+1 + "/" + valCurDate.getDate() + "/" + valCurDate.getYear();
+					    var CurDate = new Date(valCurDate);
+					 
+					    if(FromDate > ToDate)
+					    {
+					        alert(FromDate + " should be less than " + toinput);
+					        return false; 
+					    }
+					    else if(FromDate > CurDate)
+					    {
+					        alert("From date should be less than current date");
+					        return false; 
+					    }
+					    else if(ToDate > CurDate)
+					    {
+					        alert("To date should be less than current date");
+					        return false;
+					    }
+					}
+}]);*/
+
+/*
+app.controller('DateController', ['$scope', function($scope) {
+    $scope.fromValue = new Date(2010, 11, 28, 14, 57);
+    $scope.toValue = new Date(2014, 11, 22, 14, 57);
+    
+   
+}
+]);*/
 app.controller('SortController', function($scope){
 	$scope.orderByField = "";
 	$scope.reverseSort = false;
 });
+/* trial code
+ app..config(function($datepickerProvider) {
+	  angular.extend($datepickerProvider.defaults, {
+		    dateFormat: 'dd/MM/yyyy',
+		    startWeek: 1
+		  });
+		})
+app.controller('DatepickerDemoCtrl', function($scope, $http) {
 
+	  $scope.selectedDate = new Date();
+	  $scope.selectedDateAsNumber = Date.UTC(1986, 1, 22);
+	  // $scope.fromDate = new Date();
+	  // $scope.untilDate = new Date();
+	  $scope.getType = function(key) {
+	    return Object.prototype.toString.call($scope[key]);
+	  };
 
+	  $scope.clearDates = function() {
+	    $scope.selectedDate = null;
+	  };
+
+	});* 
+ */
+/*app.controller('PageController', function($scope){
+function MyCtrl($scope) {
+    $scope.currentPage = 0;
+    $scope.pageSize = 10;
+    $scope.data = [];
+    $scope.numberOfPages=function(){
+        return Math.ceil($scope.data.length/$scope.pageSize);                
+    }
+    for (var i=0; i<45; i++) {
+        $scope.data.push("Item "+i);
+    }
+}
+});*/
 /**app.config(["$routeProvider",function ($routeProvider) {
 $routeProvider.when("/", {
     templateUrl: "templates/home.html",

@@ -1,72 +1,106 @@
-<h3>Report1</h3>
+<!-- <h2>Report1</h2>
 <h4>
   {{report.r}}
-</h4>
-<h3>Search Transaction messages</h3>
-<form name="searchTM" ng-controller="DateController as dateCtrl"> 
-	<label for"partnerID"> PartnerID </label>
-	<input type="text" style="width: 100px" id="partnerID" ng-model="partnerID" required> 	
-		<!--OR <br>
-		<label for"partnerName"> Partner Name </label>
-		<input type="text" style="width: 100px" id="partnerName" ng-model="partnerName"> -->
-		<!-- <div class="col-md-3">
-		<input id="searchPartner" type="submit"  ng-click="search()" value="Search">
-		</div></form> -->
-			<!-- <form name="SearchTransactMesg" ng-controller="DateController as dateCtrl"> -->
- 	<label for"Date">Select date and time window : </label>
-  	from: <input type="datetime-local" id="exampleInput" name="input" ng-model="value"
-      placeholder="yyyy-MM-ddTHH:mm" min="2001-01-01T00:00" max="2013-12-31T00:00" required />
-    to:  <input type="datetime-local" id="exampleInput" name="input" ng-model="value"
-      placeholder="yyyy-MM-ddTHH:mm" min="2001-01-01T00:00" max="2013-12-31T00:00" required />
-			  <span class="error" ng-show="myForm.input.$error.required">
-			      Required!</span>
-			  <span class="error" ng-show="myForm.input.$error.datetimelocal">
-			      Not a valid date!</span>
-			  <!-- <tt>value = {{value | date: "yyyy-MM-ddTHH:mm"}}</tt><br/>
-			  <tt>myForm.input.$valid = {{myForm.input.$valid}}</tt><br/>
-			  <tt>myForm.input.$error = {{myForm.input.$error}}</tt><br/>
-			  <tt>myForm.$valid = {{myForm.$valid}}</tt><br/>
-			  <tt>myForm.$error.required = {{!!myForm.$error.required}}</tt><br/> -->
-  <div class="col-md-3">
-	<input id="searchTM" type="submit"  ng-click="search()" value="Search">
-  </div>
+</h4> -->
+<h4>Search Transaction messages</h4>
+<form name="searchTM"> 
+		PartnerID : 
+			<input type="text" style="width: 100px" id="partnerID" ng-model="partnerID" required> 	
+			<br>
+	
+	 	Select date and time : From - 
+	 		<input 	type="datetime-local" 
+	 				id="fromInput" 
+	 				name="frominput" 
+	 				ng-model="fromValue"
+      				placeholder="yyyy-MM-ddTHH:mm" 
+      				min="2001-01-01T00:00" 
+      				required />
+	  					<span class="error" ng-show="searchTM.frominput.$error.required">
+	      				Required!</span>
+	  					<span class="error" ng-show="searchTM.frominput.$error.datetimelocal">
+	      				Not a valid date!</span>
+      		 - To - 
+	 		<input 	type="datetime-local" 
+	 				id="toInput" 
+	 				name="toinput" 
+	 				ng-model="toValue"
+      				placeholder="yyyy-MM-ddTHH:mm" 
+      				max="2014-08-31T00:00"
+      				ng-change="comDate()" 
+      				required />
+			  			<span class="error" ng-show="searchTM.toinput.$error.required">
+			      		Required!</span>
+			  			<span class="error" ng-show="searchTM.toinput.$error.datetimelocal">
+			      		Not a valid date!</span>
+			      		
+	 <div class="col-md-3">
+		<button id="searchTM" ng-disabled="searchTM.$invalid" ng-click="search()" value="Search">Search</button>
+	 </div>
   
 </form>
-</div>
+      		
+ <!-- conditional content -->
+<div ng-hide="!messages">
+Records for Partner ID <b>"{{partnerID}}" </b>from <i>{{fromValue | date:'short'}}</i> to <i>{{toValue | date:'short'}}</i> :    
 <br>
-<div ng-hide="!partners">
 <section ng-controller="SortController">
   <span class="label">Ordered By: {{orderByField}}</span><br><br>
-  <table id="partnerList" class="table table-bordered"><!--  border="1">-->
+  <table id="transactMesgList" class="table table-bordered"><!--  border="1">-->
     <thead>
       <tr>
         <th>
-          <a href="" ng-click="orderByField='name'; reverseSort = !reverseSort">
-          Partner Name <span ng-show="orderByField == 'name'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          <a href="" ng-click="orderByField='mesgid'; reverseSort = !reverseSort">
+         Message ID <span ng-show="orderByField == 'mesgid'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
           </a>
         </th>
         <th>
-          <a href="" ng-click="orderByField='accountType'; reverseSort = !reverseSort">
-          Account Type <span ng-show="orderByField == 'accountType'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          <a href="" ng-click="orderByField='transctID'; reverseSort = !reverseSort">
+          Transaction ID <span ng-show="orderByField == 'transctID'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
           </a>
         </th>
         <th>
-          <a href="" ng-click="orderByField='status'; reverseSort = !reverseSort">
-          Account Status <span ng-show="orderByField == 'status'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          <a href="" ng-click="orderByField='mesgType'; reverseSort = !reverseSort">
+          Message Type <span ng-show="orderByField == 'mesgType'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="orderByField='mesgTxt'; reverseSort = !reverseSort">
+          Message Text <span ng-show="orderByField == 'mesgTxt'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="orderByField='type'; reverseSort = !reverseSort">
+          Category <span ng-show="orderByField == 'type'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="orderByField='transactTime'; reverseSort = !reverseSort">
+          Transaction Time <span ng-show="orderByField == 'transactTime'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="orderByField='sendingPartner'; reverseSort = !reverseSort">
+          Sending Partner <span ng-show="orderByField == 'sendingPartner'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
           </a>
         </th>
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="partner in partners |orderBy:orderByField:reverseSort">
-       		  <td>{{partner.name}}</td>
-			  <td>{{partner.accountType}}</td> 
-			  <td>{{partner.status}}</td>
-			</tr>
+      	<tr ng-repeat="mesg in messages |orderBy:orderByField:reverseSort">
+       		  <td>{{mesg.mesgid}}</td>
+			  <td>{{mesg.transctID}}</td> 
+			  <td>{{mesg.mesgType}}</td>
+			  <td>{{mesg.mesgTxt}}</td>
+			  <td>{{mesg.type}}</td> 
+			  <td>{{mesg.transactTime}}</td>
+			  <td>{{mesg.sendingPartner}}</td>
+		</tr>
     </tbody>
   </table>
 </section>
 
 		<br>
-		<input type="button" onclick="tableToExcel('partnerList', 'Partner List')" value="Export to Excel">
+		<input type="button" onclick="tableToExcel('transactMesgList', 'Transaction Messages List')" value="Export to Excel">
 </div> 
+		

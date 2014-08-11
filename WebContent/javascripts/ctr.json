@@ -3,54 +3,72 @@
     "id":"1",
     "name":"Bank Of America",
     "accountType":"Visa",
-    "status":"active"
+    "status":"active",
+    "mesgName":"Notification Request",
+    "mesgDesc":"A notification to send in response to the original SMS message"
   },
   {
     "id":"2",
     "name":"Wells Fargo",
     "accountType":"Visa",
-    "status":"active"
+    "status":"active",
+    "mesgName":"Notification Reply",
+    "mesgDesc":"Tells the SMS processor the Mobile Gateway received the request"    
   },
   {
     "id":"3",
     "name":"Bit coin",
     "accountType":"Master",
-    "status":"active"
+    "status":"active",
+    "mesgName":"Send SMS Message Request",
+    "mesgDesc":"Sends an SMS message"    
   },
   {
     "id":"4",
     "name":"Amex",
     "accountType":"Amex",
-    "status":"active"
+    "status":"active",
+    "mesgName":"Notification Reply",
+    "mesgDesc":"Tells the SMS processor the Mobile Gateway received the request"    
   },
   {
     "id":"5",
     "name":"First Partner",
     "accountType":"Visa",
-    "status":"Inactive"
+    "status":"Inactive",
+    "mesgName":"Notification Reply",
+    "mesgDesc":"Tells the SMS processor the Mobile Gateway received the request"    
   },
   {
     "id":"6",
     "name":"Barclays",
     "accountType":"Visa",
-    "status":"locked"
+    "status":"locked",
+   	"mesgName":"Send SMS Message Request",
+    "mesgDesc":"Sends an SMS message"  
   },
   {
     "id":"7",
     "name":"HSBC",
     "accountType":"Master",
-    "status":"active"
+    "status":"active",
+    "mesgName":"Notification Reply",
+    "mesgDesc":"Tells the SMS processor the Mobile Gateway received the request"    
   },
   {
     "id":"8",
     "name":"Citi",
     "accountType":"Visa",
-    "status":"active"
+    "status":"active",
+    "mesgName":"Notification Reply",
+    "mesgDesc":"Tells the SMS processor the Mobile Gateway received the request"    
   },
   {
     "id":"9",
     "name":"Suntrust",
     "accountType":"Visa",
-    "status":"expired"
+    "status":"expired",
+    "mesgName":"Send SMS Message Request",
+    "mesgDesc":"Sends an SMS message"
   }
 ]

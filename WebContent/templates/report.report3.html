@@ -1,4 +1,89 @@
-<h3>List of Route 2 Objects</h3>
-<ul>
+<h4>Enrollment count for an Issuer / Partner</h4>
+<!--<ul>
   <li ng-repeat="object in objects">{{object}}</li>
 </ul>
+<h4>Delivery Receipts for a Partner</h4>
+ -->
+
+<form name="enrollCount"> 
+		IssuerID : 
+			<input type="text" style="width: 100px" id="issuerID" ng-model="issuerID" required> 	
+			OR PartnerID : 
+			<input type="text" style="width: 100px" id="partnerID" ng-model="partnerID" > 
+			<br>
+	
+	 	Select date and time : From - 
+	 		<input 	type="datetime-local" 
+	 				id="fromInput" 
+	 				name="frominput" 
+	 				ng-model="fromValue"
+      				placeholder="yyyy-MM-ddTHH:mm" 
+      				min="2001-01-01T00:00" 
+      				required />
+	  					<span class="error" ng-show="enrollCount.frominput.$error.required">
+	      				Required!</span>
+	  					<span class="error" ng-show="enrollCount.frominput.$error.datetimelocal">
+	      				Not a valid date!</span>
+      		 - To - 
+	 		<input 	type="datetime-local" 
+	 				id="toInput" 
+	 				name="toinput" 
+	 				ng-model="toValue"
+      				placeholder="yyyy-MM-ddTHH:mm" 
+      				max="2014-08-31T00:00"
+      				ng-change="comDate()" 
+      				required />
+			  			<span class="error" ng-show="enrollCount.toinput.$error.required">
+			      		Required!</span>
+			  			<span class="error" ng-show="enrollCount.toinput.$error.datetimelocal">
+			      		Not a valid date!</span>
+			      		
+	 <div class="col-md-3">
+		<button id="enrollCount" ng-disabled="enrollCount.$invalid" ng-click="search()" value="Search">Search</button>
+	 </div>
+  
+</form>
+      		
+ <!-- conditional content -->
+<div ng-hide="!counts">
+Records for ID <b>"{{issuerID}}" </b>from <i>{{fromValue | date:'short'}}</i> to <i>{{toValue | date:'short'}}</i> :  
+<br>
+<section ng-controller="SortController">
+  <span class="label">Ordered By: {{orderByField}}</span><br><br>
+  <table id="enrollCount" class="table table-bordered"><!--  border="1">-->
+    <thead>
+      <tr>
+        <th>
+          <a href="" ng-click="orderByField='issuerID'; reverseSort = !reverseSort">
+         Issuer ID <span ng-show="orderByField == 'issuerID'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="orderByField='partnerID'; reverseSort = !reverseSort">
+          Partner ID <span ng-show="orderByField == 'partnerID'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="orderByField='enrollCount'; reverseSort = !reverseSort">
+          Enrollment Count <span ng-show="orderByField == 'enrollCount'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+       
+      </tr>
+    </thead>
+    <tbody>
+  
+      	<tr ng-repeat="c in counts |orderBy:orderByField:reverseSort">
+       		  <td>{{c.issuerID}}</td>
+			  <td>{{c.partnerID}}</td> 
+			  <td>{{c.enrollCount}}</td>
+		</tr>
+    </tbody>
+  </table>
+</section>
+
+		<br>
+		<input type="button" onclick="tableToExcel('enrollCount', 'Enrollment Count')" value="Export to Excel">
+</div> 
+		
+ 

@@ -1,49 +1,70 @@
 <div>
 	<form name="searchPartner" >
-		<label for"partnerID"> PartnerID </label>
+		<h5>Find by PartnerID:</h5>
 		<input type="text" style="width: 100px" id="partnerID" ng-model="partnerID" required> 	
 		<!--OR <br>
 		<label for"partnerName"> Partner Name </label>
 		<input type="text" style="width: 100px" id="partnerName" ng-model="partnerName"> -->
 		<div class="col-md-3">
-		<input id="searchPartner" type="submit"  ng-click="search()" value="Search">
+		<input id="searchPartner" type="submit"  ng-disabled="!searchPartner.$valid" ng-click="search()" value="Search">
 		</div>
-		<span>{{partnerID}}</span>
+		
 	</form>
 </div>
+
 <div ng-hide="!partners">
+
+Records for Partner ID {{partnerID}}:
+<br>
 <section ng-controller="SortController">
   <span class="label">Ordered By: {{orderByField}}</span><br><br>
   <table id="partnerList" class="table table-bordered"><!--  border="1">-->
     <thead>
       <tr>
         <th>
-          <a href="" ng-click="orderByField='name'; reverseSort = !reverseSort">
-          Partner Name <span ng-show="orderByField == 'name'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          <a href="" ng-click="orderByField='id'; reverseSort = !reverseSort">
+          Partner ID <span ng-show="orderByField == 'id'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
           </a>
         </th>
         <th>
-          <a href="" ng-click="orderByField='accountType'; reverseSort = !reverseSort">
-          Account Type <span ng-show="orderByField == 'accountType'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          <a href="" ng-click="orderByField='name'; reverseSort = !reverseSort">
+          Partner Name <span ng-show="orderByField == 'name'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
           </a>
         </th>
         <th>
           <a href="" ng-click="orderByField='status'; reverseSort = !reverseSort">
           Account Status <span ng-show="orderByField == 'status'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
           </a>
-        </th>
+        </th> 
+       <!--  <th>
+          <a href="" ng-click="orderByField='mesgName'; reverseSort = !reverseSort">
+          Message Name <span ng-show="orderByField == 'mesgName'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>-->
+       	<th>
+          <a href="" ng-click="orderByField='accountType'; reverseSort = !reverseSort">
+          Account Type <span ng-show="orderByField == 'accountType'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th> 
+         <!-- <th>
+          <a href="" ng-click="orderByField='mesgDesc'; reverseSort = !reverseSort">
+          Message Desc <span ng-show="orderByField == 'mesgDesc'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>-->
       </tr>
     </thead>
     <tbody>
       <tr ng-repeat="partner in partners |orderBy:orderByField:reverseSort">
-       		  <td>{{partner.name}}</td>
+       		  <td>{{partner.id}}</td>
+			  <td>{{partner.name}}</td> 
+			  <td>{{partner.status}}</td> 
+			  <!-- <td>{{partner.mesgName}}</td> -->
 			  <td>{{partner.accountType}}</td> 
-			  <td>{{partner.status}}</td>
+			  <!-- <td>{{partner.mesgDesc}}</td> -->
 			</tr>
     </tbody>
   </table>
 </section>
-
 		<br>
 		<input type="button" onclick="tableToExcel('partnerList', 'Partner List')" value="Export to Excel">
 </div> 

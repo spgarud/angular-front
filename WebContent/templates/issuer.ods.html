@@ -1,0 +1,81 @@
+<h4>Omaha configuration value</h4>
+<div>
+		
+			<form name="searchIssuerODS" >
+				<h5>Search by IssuerID:</h5>
+				<input type="text" style="width: 100px" id="issuerID" ng-model="issuerID" required> 	<!--OR <br>
+				<label for"issuerName"> Issuer Name </label>
+				<input type="text" style="width: 100px" id="issuerName" ng-model="issuerName">-->
+				<div class="col-md-3">
+				<input id="searchIssuerODS" ng-disabled="!searchIssuerODS.$valid" ng-click="search()" type="submit" value="Search">
+				</div>
+				
+			</form>
+		
+</div> 
+<div ng-hide="!configs">
+Records for Issuer ID {{issuerID}}:
+<section ng-controller="SortController">
+  <span class="label">Ordered By: {{orderByField}}</span><br><br>
+  <table id="configList" class="table table-bordered"><!--  border="1">-->
+    <thead>
+      <tr>
+        <th>
+          <a href="" ng-click="orderByField='issuerID'; reverseSort = !reverseSort">
+          Issuer ID <span ng-show="orderByField == 'issuerID'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="orderByField='issuerType'; reverseSort = !reverseSort">
+          Issuer Type <span ng-show="orderByField == 'issuerType'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="orderByField='desc'; reverseSort = !reverseSort">
+          Description <span ng-show="orderByField == 'desc'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+         <th>
+          <a href="" ng-click="orderByField='attributeName'; reverseSort = !reverseSort">
+          Attribute Name <span ng-show="orderByField == 'attributeName'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="orderByField='attributeValue'; reverseSort = !reverseSort">
+          Attribute Value <span ng-show="orderByField == 'attributeValue'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+        <th>
+          <a href="" ng-click="orderByField='dateCreated'; reverseSort = !reverseSort">
+          Date Created <span ng-show="orderByField == 'dateCreated'"><span ng-show="!reverseSort">^</span><span ng-show="reverseSort">v</span></span>
+          </a>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="config in configs | orderBy:orderByField:reverseSort">
+       		  <td>{{config.issuerID}}</td>
+			  <td>{{config.issuerType}}</td> 
+			  <td>{{config.desc}}</td>
+			  <td>{{config.attributeName}}</td>
+			  <td>{{config.attributeValue}}</td>
+			  <td>{{config.dateCreated}}</td>
+			</tr>
+     </tbody>
+  </table>
+</section>
+<!-- <table id="issuerList" border="1">
+			<tr>
+			  <td>Issuer Name</td>
+			  <td>Account Type</td> 
+			  <td>Account Status</td>
+			</tr>
+			<tr ng-repeat="issuer in issuers | limitTo:5 ">
+			  <td>{{issuer.name}}</td>
+			  <td>{{issuer.accountType}}</td> 
+			  <td>{{issuer.status}}</td>
+			</tr>
+		</table> -->
+		<br>
+		<input type="button" onclick="tableToExcel('configList', 'ODS Configuration')" value="Export to Excel">
+</div> 

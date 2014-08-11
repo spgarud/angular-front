@@ -2,17 +2,19 @@
 <div>
 		
 			<form name="searchAccount">
-				 Phone Number <input type="text" style="width: 100px" id="phoneNo" ng-model="phoneNo" placeholder="Phone No."> 	OR 
+				 Search by Phone Number <input type="text" style="width: 100px" id="phoneNo" ng-model="phoneNo" placeholder="Phone No." required> 	OR 
 				 Email <input type="email" style="width: 100px" id="email" ng-model="email" placeholder="Email Address">
 				<div class="col-md-3">
-				<input id="searchAcc" type="submit" ng-click="search()" value="Search">
+				<input id="searchAcc" type="submit"  ng-disabled="!searchAccount.$valid" ng-click="search()" value="Search">
 				</div>
 				<!-- <span>{{phoneNo }}</span> -->
 			</form>
 		
 </div> 
-<br>
+
 <div ng-hide="!accounts">
+Records for Phone # {{phoneNo}}:
+<br>
 		<section ng-controller="SortController">
   <span class="label">Ordered By: {{orderByField}}</span><br><br>
   <table id="accountList" class="table table-bordered"><!--  border="1">-->

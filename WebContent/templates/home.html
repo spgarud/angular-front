@@ -1,8 +1,9 @@
 
-
+<h6><i>{{message.m}} / current user: {{userInfo.userName}}   <a ng-click="logout()" class="btn btn-link">Logout</a></i></h6>
 <div  class="navbar" >
     <div class="navbar-inner">
     <!--    <a class="brand" href="#">SMS Portal</a> -->
+     
       <ul class="nav">
         <li><a ui-sref="home">Home</a></li>
 		<li><a ui-sref=".partner">Partner</a></li>
@@ -10,17 +11,16 @@
 		<li><a ui-sref=".account">Account</a></li>
         <li><a ui-sref=".report">Report</a></li>
       </ul>
-     
+     </div>	
     </div>
- </div>
-<body class="container">
+ 
+<!-- <body class="container"> -->
 
  <div class="row">
-    <div class="span12">	
-    <a ng-click="logout()" class="btn btn-link">Logout</a>
-<h4>{{message.m}} </h4>
-<div ui-view></div>
-
-</div>
+	<div class="span12">	
+	  	
+		<div ui-view></div>
+	
+	</div>
 </div>
  
